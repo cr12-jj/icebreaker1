@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>暖糊 · 破冰助手</title>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #FF6B81;
+    --pink-light: #FFF0F3;
+    --pink-mid: #FFD6DC;
+    --warm: #FF8E53;
+    --green: #06D6A0;
+    --text: #2D2D2D;
+    --text-sub: #888;
+    --white: #FFFFFF;
+    --card-bg: #FFFAFA;
+    --shadow: 0 8px 32px rgba(255,107,129,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--pink-light);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── PAGE SYSTEM ─── */
+  .page {
+    display: none;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    position: relative;
+    flex-direction: column;
+    background: var(--pink-light);
+  }
+  .page.active { display: flex; }
+
+  /* ─── PROGRESS BAR ─── */
+  .progress-wrap {
+    padding: 16px 20px 0;
+    position: sticky; top: 0; z-index: 10;
+    background: var(--pink-light);
+  }
+  .progress-label { font-size: 12px; color: var(--text-sub); margin-bottom: 6px; }
+  .progress-track {
+    height: 4px; background: var(--pink-mid);
+    border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--pink), var(--warm));
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* ─── PAGE 1: HOME ─── */
+  #p1 { justify-content: space-between; }
+
+  .hero-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px 20px;
+    gap: 0;
+  }
+
+  .mascot-wrap {
+    position: relative;
+    width: 200px; height: 200px;
+    margin-bottom: 32px;
+  }
+  .mascot-bg {
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFD6DC 0%, #FFF0F3 100%);
+    position: absolute;
+    animation: floatBg 4s ease-in-out infinite;
+  }
+  .mascot-svg {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: mascotFloat 3s ease-in-out infinite;
+  }
+  @keyframes floatBg {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+  @keyframes mascotFloat {
+    0%,100% { transform: translate(-50%, -50%) translateY(0); }
+    50% { transform: translate(-50%, -50%) translateY(-8px); }
+  }
+
+  /* Floating hearts */
+  .float-hearts { position: absolute; width: 100%; height: 100%; top:0; left:0; pointer-events:none; }
+  .fh {
+    position: absolute;
+    font-size: 18px;
+    animation: floatHeart 3s ease-in-out infinite;
+    opacity: 0.7;
+  }
+  .fh:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+  .fh:nth-child(2) { top: 20%; right: 5%; animation-delay: 0.7s; font-size: 14px; }
+  .fh:nth-child(3) { bottom: 15%; left: 8%; animation-delay: 1.4s; font-size: 12px; }
+  .fh:nth-child(4) { bottom: 20%; right: 12%; animation-delay: 2.1s; }
+  @keyframes floatHeart {
+    0%,100% { transform: translateY(0) scale(1); opacity: 0.7; }
+    50% { transform: translateY(-12px) scale(1.1); opacity: 1; }
+  }
+
+  .headline {
+    font-family: 'ZCOOL XiaoWei', serif;
+    font-size: 28px;
+    color: var(--text);
+    text-align: center;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+  .headline em { color: var(--pink); font-style: normal; }
+
+  .sub-headline {
+    font-size: 15px;
+    color: var(--text-sub);
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--white);
+    border: 1px solid var(--pink-mid);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    color: var(--text-sub);
+    margin-bottom: 8px;
+  }
+  .trust-badge .dot {
+    width: 7px; height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; transform: scale(1); }
+    50% { opacity:0.5; transform: scale(0.8); }
+  }
+
+  /* ─── BOTTOM CTA ─── */
+  .cta-area {
+    padding: 16px 20px 40px;
+  }
+
+  .btn-main {
+    width: 100%;
+    height: 56px;
+    background: linear-gradient(135deg, var(--pink) 0%, var(--warm) 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 28px;
+    font-size: 18px;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(255,107,129,0.35);
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-main::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .btn-main:active { transform: scale(0.97); box-shadow: 0 4px 12px rgba(255,107,129,0.25); }
+  .btn-main:active::after { opacity: 1; }
+  .btn-main.disabled { opacity: 0.45; pointer-events: none; }
+
+  .btn-sec {
+    width: 100%; height: 48px;
+    background: var(--white);
+    color: var(--pink);
+    border: 1.5px solid var(--pink-mid);
+    border-radius: 24px;
+    font-size: 16px;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+    margin-top: 12px;
+  }
+  .btn-sec:active { background: var(--pink-light); transform: scale(0.97); }
+
+  /* ─── PAGE 2: SELECT ─── */
+  #p2 { padding-bottom: 120px; }
+  .select-body { padding: 24px 20px 0; flex: 1; }
+
+  .q-block { margin-bottom: 28px; }
+  .q-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+  .q-title .emoji { margin-right: 6px; }
+
+  .opts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .opt {
+    background: var(--white);
+    border: 1.5px solid var(--pink-mid);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .opt .opt-emoji { display: block; font-size: 22px; margin-bottom: 4px; }
+  .opt:active { transform: scale(0.96); }
+  .opt.selected {
+    background: linear-gradient(135deg, #FFF0F3, #FFD6DC);
+    border-color: var(--pink);
+    color: var(--pink);
+    box-shadow: 0 4px 16px rgba(255,107,129,0.18);
+  }
+  .opt.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 6px; right: 8px;
+    font-size: 11px;
+    color: var(--pink);
+    font-weight: 700;
+  }
+
+  .fixed-bottom {
+    position: fixed;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%; max-width: 430px;
+    padding: 16px 20px 32px;
+    background: linear-gradient(to top, var(--pink-light) 70%, transparent);
+    z-index: 20;
+  }
+
+  /* ─── PAGE 3: LOADING ─── */
+  #p3 { align-items: center; justify-content: center; gap: 0; }
+  .loading-mascot {
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFD6DC, #FFF0F3);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 32px;
+    animation: breathe 2s ease-in-out infinite;
+  }
+  @keyframes breathe {
+    0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,107,129,0.2); }
+    50% { transform: scale(1.06); box-shadow: 0 0 0 20px rgba(255,107,129,0); }
+  }
+  .loading-text {
+    font-family: 'ZCOOL XiaoWei', serif;
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 8px;
+    text-align: center;
+    min-height: 32px;
+    transition: opacity 0.3s;
+  }
+  .loading-sub {
+    font-size: 14px; color: var(--text-sub);
+    text-align: center; margin-bottom: 40px;
+  }
+  .dot-track {
+    display: flex; gap: 8px;
+  }
+  .dot-item {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--pink-mid);
+    animation: dotBounce 1.2s ease-in-out infinite;
+  }
+  .dot-item:nth-child(2) { animation-delay: 0.2s; }
+  .dot-item:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dotBounce {
+    0%,60%,100% { transform: translateY(0); background: var(--pink-mid); }
+    30% { transform: translateY(-10px); background: var(--pink); }
+  }
+
+  /* ─── PAGE 4: RESULT ─── */
+  #p4 { padding-bottom: 180px; }
+  .result-header {
+    padding: 24px 20px 0;
+    text-align: center;
+  }
+  .result-header h2 {
+    font-family: 'ZCOOL XiaoWei', serif;
+    font-size: 24px; color: var(--text);
+    line-height: 1.4; margin-bottom: 4px;
+  }
+  .result-header p { font-size: 14px; color: var(--text-sub); }
+
+  .result-card-wrap {
+    margin: 20px 20px 0;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow);
+  }
+  .result-card {
+    background: var(--white);
+    padding: 24px 20px;
+    position: relative;
+  }
+  .result-card .quote-mark {
+    font-family: Georgia, serif;
+    font-size: 64px;
+    color: var(--pink-mid);
+    line-height: 1;
+    margin-bottom: -16px;
+    display: block;
+  }
+  .result-text {
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--text);
+    font-weight: 400;
+    letter-spacing: 0.3px;
+  }
+  .result-text .blur-part {
+    filter: blur(5px);
+    user-select: none;
+    color: var(--text-sub);
+    position: relative;
+  }
+  .result-mask {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(to top, var(--white) 40%, transparent);
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 16px;
+  }
+  .lock-hint {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--text-sub);
+  }
+
+  .stat-row {
+    margin: 16px 20px 0;
+    background: linear-gradient(135deg, #FFF0F3, #FFF8F9);
+    border: 1px solid var(--pink-mid);
+    border-radius: 16px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .stat-row .stat-num {
+    font-family: 'ZCOOL XiaoWei', serif;
+    font-size: 28px;
+    color: var(--pink);
+    white-space: nowrap;
+  }
+  .stat-row .stat-desc { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+
+  .price-block {
+    margin: 16px 20px 0;
+    text-align: center;
+  }
+  .price-old {
+    font-size: 14px; color: var(--text-sub);
+    text-decoration: line-through;
+    margin-bottom: 4px;
+  }
+  .price-new {
+    font-family: 'ZCOOL XiaoWei', serif;
+    font-size: 36px; color: var(--pink);
+    font-weight: 700;
+  }
+  .price-new span { font-size: 18px; }
+  .price-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--pink), var(--warm));
+    color: white;
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 10px;
+    margin-left: 8px;
+    vertical-align: middle;
+    font-weight: 700;
+  }
+
+  .safe-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-sub);
+    margin-top: 10px;
+  }
+
+  /* ─── PAGE 5: SUCCESS ─── */
+  #p5 { align-items: center; padding: 40px 20px; }
+
+  .success-icon {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: #FFB7C5;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px #FF8FA3;
+    animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .success-title {
+    font-family: 'ZCOOL XiaoWei', serif;
+    font-size: 26px; color: var(--text);
+    margin-bottom: 8px; text-align: center;
+  }
+  .success-sub { font-size: 14px; color: var(--text-sub); margin-bottom: 28px; text-align: center; }
+
+  .full-card {
+    width: 100%;
+    background: var(--white);
+    border-radius: 20px;
+    padding: 24px 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .full-card .quote-mark {
+    font-family: Georgia, serif;
+    font-size: 48px;
+    color: var(--pink-mid);
+    line-height: 0.8;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .full-text {
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--text);
+    letter-spacing: 0.3px;
+  }
+  .copy-ripple {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: var(--pink-light);
+    border: 1px solid var(--pink-mid);
+    border-radius: 10px;
+    padding: 4px 10px;
+    font-size: 12px; color: var(--pink);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  .copy-ripple:active { background: var(--pink-mid); }
+  .copy-ripple.copied { background: #fae3d8; border-color: var(--warm); color: var(--warm); }
+
+  .echo-hint {
+    background: linear-gradient(135deg, #FFF0F3, #FFFAFA);
+    border: 1px solid var(--pink-mid);
+    border-radius: 16px;
+    padding: 16px 20px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  .echo-hint .mascot-small { font-size: 28px; margin-bottom: 8px; }
+  .echo-hint p { font-size: 14px; color: var(--text-sub); line-height: 1.6; }
+  .echo-hint p strong { color: var(--pink); }
+
+  /* ─── DECORATIVE BG ─── */
+  .page-deco {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .deco-blob {
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,129,0.06) 0%, transparent 70%);
+    top: -100px; right: -80px;
+    position: absolute;
+  }
+  .deco-blob2 {
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,142,83,0.06) 0%, transparent 70%);
+    bottom: 100px; left: -60px;
+    position: absolute;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ PAGE 1: HOME ══════════════ -->
+<div class="page active" id="p1">
+  <div class="hero-area">
+    <div class="mascot-wrap">
+      <div class="mascot-bg"></div>
+      <div class="float-hearts">
+        <span class="fh">💗</span>
+        <span class="fh">✨</span>
+        <span class="fh">🌸</span>
+        <span class="fh">💕</span>
+      </div>
+      <!-- Local mascot image -->
+      <img src="https://ykl.fit/jjj/fm2.png" alt="Mascot" class="mascot-svg" width="180" height="180">
+    </div>
+
+    <h1 class="headline">吵完了<br>不知道怎么<em>开口</em>？</h1>
+    <p class="sub-headline">告诉暖糊你的情况<br>帮你写一句让 TA 主动回你的话 ❤️</p>
+
+    <div class="trust-badge">
+      <span class="dot"></span>
+      已帮 <strong style="color:#FF6B81; margin: 0 3px;">3,280</strong> 对情侣成功破冰
+    </div>
+  </div>
+
+  <div class="cta-area">
+    <button class="btn-main" onclick="goTo('p2')">✨ 生成我的破冰话</button>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 2: SELECT ══════════════ -->
+<div class="page" id="p2">
+  <div class="progress-wrap">
+    <div class="progress-label">暖糊正在了解你的情况…</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="select-body" id="selectBody">
+    <!-- Q1 -->
+    <div class="q-block">
+      <div class="q-title"><span class="emoji">😶</span>现在是什么状态？</div>
+      <div class="opts" id="q1">
+        <div class="opt" data-q="1" data-val="coldwar" onclick="selectOpt(this)">
+          <span class="opt-emoji">🧊</span>冷战中
+        </div>
+        <div class="opt" data-q="1" data-val="makeup" onclick="selectOpt(this)">
+          <span class="opt-emoji">🤝</span>我想求和
+        </div>
+        <div class="opt" data-q="1" data-val="wrongsay" onclick="selectOpt(this)">
+          <span class="opt-emoji">💬</span>我说错话了
+        </div>
+        <div class="opt" data-q="1" data-val="ignored" onclick="selectOpt(this)">
+          <span class="opt-emoji">📵</span>TA 不理我
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-block">
+      <div class="q-title"><span class="emoji">🧩</span>TA 是什么性格？</div>
+      <div class="opts" id="q2">
+        <div class="opt" data-q="2" data-val="softheart" onclick="selectOpt(this)">
+          <span class="opt-emoji">🥺</span>心软型
+        </div>
+        <div class="opt" data-q="2" data-val="gentle" onclick="selectOpt(this)">
+          <span class="opt-emoji">🌸</span>吃软不吃硬
+        </div>
+        <div class="opt" data-q="2" data-val="rational" onclick="selectOpt(this)">
+          <span class="opt-emoji">📊</span>理性派
+        </div>
+        <div class="opt" data-q="2" data-val="sensitive" onclick="selectOpt(this)">
+          <span class="opt-emoji">🌊</span>情绪敏感型
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-block">
+      <div class="q-title"><span class="emoji">💌</span>你想用什么方式？</div>
+      <div class="opts" id="q3">
+        <div class="opt" data-q="3" data-val="sincere" onclick="selectOpt(this)">
+          <span class="opt-emoji">🙏</span>真诚道歉
+        </div>
+        <div class="opt" data-q="3" data-val="cute" onclick="selectOpt(this)">
+          <span class="opt-emoji">🐣</span>撒娇求和
+        </div>
+        <div class="opt" data-q="3" data-val="humor" onclick="selectOpt(this)">
+          <span class="opt-emoji">😄</span>轻松幽默
+        </div>
+        <div class="opt" data-q="3" data-val="step" onclick="selectOpt(this)">
+          <span class="opt-emoji">🪜</span>给个台阶
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fixed-bottom">
+    <button class="btn-main disabled" id="genBtn" onclick="startGenerate()">生成破冰话 ❤️</button>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 3: LOADING ══════════════ -->
+<div class="page" id="p3">
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 40px 20px;">
+    <div class="loading-mascot">
+      <img src="https://ykl.fit/jjj/fm2.png" alt="Mascot" class="mascot-svg" width="180" height="180">
+    </div>
+    <div class="loading-text" id="loadingText">暖糊正在认真想…</div>
+    <div class="loading-sub">帮你找一个不伤人的说法</div>
+    <div class="dot-track">
+      <div class="dot-item"></div>
+      <div class="dot-item"></div>
+      <div class="dot-item"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 4: RESULT ══════════════ -->
+<div class="page" id="p4">
+  <div class="result-header">
+    <h2>暖糊帮你写好了 💌</h2>
+    <p>发出去之前先预览一下</p>
+  </div>
+
+  <div class="result-card-wrap">
+    <div class="result-card">
+      <span class="quote-mark">"</span>
+      <div class="result-text">
+        刚才那样说话其实不是我的本意，我只是太着急了，说话的方式不对…<span class="blur-part">我知道你现在很委屈。能不能给我一个机会好好说？我真的很在乎你，不想就这么冷着。</span>
+      </div>
+      <div class="result-mask">
+        <div class="lock-hint">🔒 解锁后查看完整话术</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-num">78%</div>
+    <div class="stat-desc">使用这句话的人<br><strong style="color:#FF6B81;">当天成功和好</strong> 💕</div>
+  </div>
+
+  <div class="price-block">
+    <div class="price-old">原价 ¥19.9</div>
+    <div>
+      <span class="price-new"><span>¥</span>6.6</span>
+      <span class="price-tag">限时</span>
+    </div>
+  </div>
+
+  <div class="safe-note">🔒 仅你可见 · 不保存任何记录</div>
+
+  <div class="fixed-bottom">
+    <button class="btn-main" onclick="goTo('p5'); trackPay()">解锁完整话术并复制 💬</button>
+    <button class="btn-sec" onclick="goTo('p2')">重新选一次</button>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 5: SUCCESS ══════════════ -->
+<div class="page" id="p5">
+  <div class="success-icon">🎉</div>
+  <div class="success-title">台阶准备好了！</div>
+  <div class="success-sub">复制发给 TA，等 TA 回你 ❤️</div>
+
+  <div class="full-card">
+    <span class="quote-mark">"</span>
+    <div class="full-text" id="fullText">
+      刚才那样说话其实不是我的本意，我只是太着急了，说话的方式不对…我知道你现在很委屈。能不能给我一个机会好好说？我真的很在乎你，不想就这么冷着。
+    </div>
+    <div class="copy-ripple" id="copyBtn" onclick="copyText()">复制</div>
+  </div>
+
+  <div class="echo-hint">
+    <div class="mascot-small">🐻</div>
+    <p>等 TA 回复你之后<br><strong>记得回来告诉暖糊结果</strong><br>暖糊在这里等你好消息 🌸</p>
+  </div>
+
+  <button class="btn-main" onclick="copyText()" style="width:100%">一键复制发给 TA 💬</button>
+</div>
+
+<script>
+// ─── NAVIGATION ───
+function goTo(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ─── SELECT LOGIC ───
+const answers = { 1: null, 2: null, 3: null };
+
+function selectOpt(el) {
+  const q = parseInt(el.dataset.q);
+  const group = document.querySelectorAll(`[data-q="${q}"]`);
+  group.forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[q] = el.dataset.val;
+  updateProgress();
+  checkReady();
+}
+
+function updateProgress() {
+  const filled = Object.values(answers).filter(v => v !== null).length;
+  const pct = Math.round((filled / 3) * 80) + (filled === 3 ? 20 : 0);
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function checkReady() {
+  const all = Object.values(answers).every(v => v !== null);
+  const btn = document.getElementById('genBtn');
+  btn.classList.toggle('disabled', !all);
+}
+
+// ─── LOADING ───
+const loadingMsgs = [
+  '暖糊正在认真想…',
+  '帮你组织语气中…',
+  '在找一个不伤人的说法…',
+  '帮你搭一个台阶…',
+  '马上就好啦 ✨'
+];
+
+let loadInterval;
+function startGenerate() {
+  if (document.getElementById('genBtn').classList.contains('disabled')) return;
+  goTo('p3');
+  let i = 0;
+  const el = document.getElementById('loadingText');
+  loadInterval = setInterval(() => {
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.textContent = loadingMsgs[i % loadingMsgs.length];
+      el.style.opacity = '1';
+      i++;
+    }, 300);
+  }, 1000);
+
+  // Generate result based on answers then show
+  setTimeout(() => {
+    clearInterval(loadInterval);
+    buildResult();
+    goTo('p4');
+  }, 3200);
+}
+
+// ─── RESULT GENERATOR ───
+const scripts = {
+  coldwar_softheart_sincere: '我知道你现在很委屈，冷战这段时间我一直在想是不是我太不体贴了。能不能给我一次机会重新开始这个对话？',
+  coldwar_gentle_cute: '我已经想了好久要怎么跟你说话了……能不能别冷战了，我想抱你。',
+  coldwar_rational_step: '我想了很多，我们都需要冷静一下。现在冷静了，你有空的话，我们可以说说吗？',
+  coldwar_sensitive_humor: '好了好了，我投降，我举白旗了。我们能不能先停战，再一起把原因说清楚？',
+  makeup_softheart_sincere: '我很在意你，所以吵架才这么难受。不管谁对谁错，我只是想先和好，你愿意吗？',
+  makeup_gentle_cute: '我错了嘛，我承认了嘛，你能不能把我当宝贝对待一下嘛 🥺',
+  makeup_rational_step: '我想了一下，我的处理方式有问题。我们可以重新谈谈吗？我想找到一个我们都舒服的方案。',
+  wrongsay_softheart_sincere: '刚才那话不是我的本意，我只是太着急了，说错了方式。你还好吗？',
+  wrongsay_gentle_cute: '对不起，我刚才说话真的不对 😔 你能原谅我吗？我不是要伤害你的。',
+  ignored_softheart_sincere: '你不回我的时候，我比你更难受。我只是想知道你还好吗。',
+  ignored_sensitive_step: '我不知道我哪里让你不开心了，但我想知道。你愿意告诉我吗？',
+};
+
+const fallback = '刚才那样说话其实不是我的本意，我只是太着急了，说话方式不对……我知道你现在很委屈。能不能给我一个机会好好说？我真的很在乎你，不想就这么冷着。';
+
+function buildResult() {
+  const key = `${answers[1]}_${answers[2]}_${answers[3]}`;
+  const fullMsg = scripts[key] || fallback;
+
+  // Show partial in result page
+  const cutOff = Math.floor(fullMsg.length * 0.5);
+  const visible = fullMsg.slice(0, cutOff);
+  const hidden = fullMsg.slice(cutOff);
+
+  document.querySelector('#p4 .result-text').innerHTML =
+    visible + `<span class="blur-part">${hidden}</span>`;
+
+  // Full text in success page
+  document.getElementById('fullText').textContent = fullMsg;
+}
+
+// ─── COPY ───
+function copyText() {
+  const text = document.getElementById('fullText').textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => showCopied());
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showCopied();
+  }
+}
+function showCopied() {
+  const btn = document.getElementById('copyBtn');
+  btn.textContent = '✓ 已复制';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied'); }, 2500);
+}
+
+function trackPay() { /* analytics hook */ }
+</script>
+</body>
+</html>
