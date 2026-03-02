@@ -811,9 +811,9 @@ const scripts = {
 
 const fallback = '刚才那样说话其实不是我的本意，我只是太着急了，说话方式不对……我知道你现在很委屈。能不能给我一个机会好好说？我真的很在乎你，不想就这么冷着。';
 
-function buildResult() {
+function buildResult(aiResult) {
   const key = `${answers[1]}_${answers[2]}_${answers[3]}`;
-  const fullMsg = scripts[key] || fallback;
+  const fullMsg = aiResult || scripts[key] || fallback;
 
   // Show partial in result page
   const cutOff = Math.floor(fullMsg.length * 0.5);
