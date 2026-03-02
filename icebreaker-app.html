@@ -585,6 +585,129 @@
     bottom: 100px; left: -60px;
     position: absolute;
   }
+
+  /* ─── 暖糊对话气泡系统 ─── */
+  .pet-bubble-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    padding: 0 20px;
+    margin-bottom: 20px;
+  }
+  .pet-bubble-row.center {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .pet-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFD6DC, #FFF0F3);
+    flex-shrink: 0;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 10px rgba(255,107,129,0.18);
+  }
+  .pet-avatar img { width: 36px; height: 36px; object-fit: contain; }
+  .pet-bubble {
+    background: var(--white);
+    border-radius: 18px 18px 18px 4px;
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text);
+    box-shadow: 0 3px 14px rgba(255,107,129,0.1);
+    position: relative;
+    max-width: calc(100% - 64px);
+    animation: bubblePop 0.35s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .pet-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: 8px; left: -7px;
+    border: 7px solid transparent;
+    border-right-color: var(--white);
+    border-left: 0;
+    filter: drop-shadow(-2px 1px 2px rgba(255,107,129,0.08));
+  }
+  .pet-bubble strong { color: var(--pink); }
+  .pet-bubble.center-bubble {
+    border-radius: 18px;
+    text-align: center;
+    max-width: 300px;
+  }
+  .pet-bubble.center-bubble::before { display: none; }
+  @keyframes bubblePop {
+    from { transform: scale(0.8) translateY(8px); opacity: 0; }
+    to   { transform: scale(1) translateY(0);    opacity: 1; }
+  }
+
+  /* 暖糊名牌 */
+  .pet-nameplate {
+    font-size: 11px;
+    color: var(--text-sub);
+    margin-left: 54px;
+    margin-top: -14px;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  /* 首页暖糊自我介绍区 */
+  .home-pet-intro {
+    width: 100%;
+    padding: 0 20px;
+    margin-top: -8px;
+    margin-bottom: 20px;
+    animation: fadeSlideUp 0.5s ease both 0.3s;
+  }
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 加载页暖糊思考气泡 */
+  .loading-bubble-area {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 0 32px;
+  }
+  .thought-bubble {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: var(--text-sub);
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(255,107,129,0.1);
+    opacity: 0;
+    transition: opacity 0.4s;
+    min-height: 38px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .thought-bubble.visible { opacity: 1; }
+
+  /* 结果页暖糊评语行 */
+  .result-pet-comment {
+    margin: 14px 20px 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  .result-pet-comment .pet-bubble {
+    font-size: 13px;
+    background: linear-gradient(135deg, #fff5f7, #ffffff);
+    border: 1px solid var(--pink-mid);
+  }
+
+  /* 成功页暖糊送别 */
+  .success-pet-farewell {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 </style>
 </head>
 <body>
@@ -606,6 +729,18 @@
 
     <h1 class="headline">吵完了<br>不知道怎么<em>开口</em>？</h1>
     <p class="sub-headline">告诉暖糊你的情况<br>帮你写一句让 TA 主动回你的话 ❤️</p>
+
+    <!-- 暖糊自我介绍气泡 -->
+    <div class="home-pet-intro">
+      <div class="pet-bubble-row">
+        <div class="pet-avatar">
+          <img src="https://ykl.fit/jjj/fm2.png" alt="暖糊">
+        </div>
+        <div class="pet-bubble">
+          我是<strong>暖糊</strong>，专门帮吵架的人找到<br>开口的方式 🐾 不评对错，只帮和好~
+        </div>
+      </div>
+    </div>
 
     <div class="trust-badge">
       <span class="dot"></span>
@@ -730,9 +865,13 @@
     <div class="loading-mascot">
       <img src="https://ykl.fit/jjj/fm2.png" alt="Mascot" class="mascot-svg" width="180" height="180">
     </div>
-    <div class="loading-text" id="loadingText">暖糊正在认真想…</div>
-    <div class="loading-sub">帮你找一个不伤人的说法</div>
-    <div class="dot-track">
+
+    <!-- 暖糊内心独白气泡 -->
+    <div class="loading-bubble-area">
+      <div class="thought-bubble" id="loadingBubble">正在认真想…</div>
+    </div>
+
+    <div class="dot-track" style="margin-top: 20px;">
       <div class="dot-item"></div>
       <div class="dot-item"></div>
       <div class="dot-item"></div>
@@ -745,6 +884,16 @@
   <div class="result-header">
     <h2>暖糊帮你准备好了 💌</h2>
     <p>解锁查看完整的 4 个部分</p>
+  </div>
+
+  <!-- 暖糊评语气泡 -->
+  <div class="result-pet-comment">
+    <div class="pet-avatar" style="width:36px;height:36px;">
+      <img src="https://ykl.fit/jjj/fm2.png" alt="暖糊" style="width:28px;height:28px;">
+    </div>
+    <div class="pet-bubble" id="p4PetComment">
+      偷偷告诉你，这句话会让TA感受到你很在乎 🐾
+    </div>
   </div>
 
   <!-- Partial speech preview -->
@@ -850,9 +999,16 @@
     </div>
   </div>
 
-  <div class="echo-hint">
-    <div class="mascot-small">🐻</div>
-    <p>等 TA 回复你之后<br><strong>记得回来告诉暖糊结果</strong><br>暖糊在这里等你好消息 🌸</p>
+  <div class="success-pet-farewell">
+    <div class="pet-bubble-row">
+      <div class="pet-avatar">
+        <img src="https://ykl.fit/jjj/fm2.png" alt="暖糊">
+      </div>
+      <div class="pet-bubble">
+        发出去吧 🐾 暖糊会在这里等你的好消息~<br>
+        <strong>等TA回复后，记得回来告诉我结果！</strong>
+      </div>
+    </div>
   </div>
 
   <button class="btn-main" onclick="copyText()" style="width:100%">一键复制话术发给 TA 💬</button>
@@ -893,12 +1049,13 @@ function checkReady() {
 }
 
 // ─── LOADING ───
+// ── 暖糊加载内心独白 ──
 const loadingMsgs = [
-  '暖糊正在认真想…',
-  '帮你组织语气中…',
-  '在找一个不伤人的说法…',
-  '帮你搭一个台阶…',
-  '马上就好啦 ✨'
+  '嗅到了一点委屈的味道……',
+  '让我想想怎么帮你说…… 🐾',
+  '这句话要轻轻的，不能伤人……',
+  '找到了一个软软的说法……',
+  '快好了，等等我 ✨'
 ];
 
 let loadInterval;
@@ -906,18 +1063,17 @@ function startGenerate() {
   if (document.getElementById('genBtn').classList.contains('disabled')) return;
   goTo('p3');
   let i = 0;
-  const el = document.getElementById('loadingText');
+  const bubble = document.getElementById('loadingBubble');
+  bubble.classList.add('visible');
   loadInterval = setInterval(() => {
-    el.style.opacity = '0';
+    bubble.classList.remove('visible');
     setTimeout(() => {
-      el.textContent = loadingMsgs[i % loadingMsgs.length];
-      el.style.opacity = '1';
+      bubble.textContent = loadingMsgs[i % loadingMsgs.length];
+      bubble.classList.add('visible');
       i++;
-    }, 300);
-  }, 1000);
-
-  // Generate result based on answers then show
- generateAI();
+    }, 400);
+  }, 1400);
+  generateAI();
 }
 
 async function generateAI() {
@@ -942,7 +1098,8 @@ async function generateAI() {
 
   } catch (err) {
     clearInterval(loadInterval);
-    document.getElementById("loadingText").textContent = "暖糊刚刚打了个盹…再试一次吧 💤";
+    const bubble = document.getElementById('loadingBubble');
+    if (bubble) { bubble.textContent = '暖糊刚刚打了个盹…再试一次吧 💤'; bubble.classList.add('visible'); }
     console.error(err);
   }
 }
@@ -980,6 +1137,18 @@ function buildResult(aiText) {
   const hidden = speech.slice(cutOff);
   document.getElementById('p4PreviewText').innerHTML =
     visible + `<span class="blur-part">${hidden}</span>`;
+
+  // 暖糊在结果页说的话（随机一条）
+  const petComments = [
+    '偷偷告诉你，这句话会让TA感受到你很在乎 🐾',
+    '我帮你把最重要的那句放进去了，TA一定能感受到 ✨',
+    '嗅了嗅……这句话软软的，不会伤到TA的 🌸',
+    '这是暖糊能找到的最适合你们的说法 💗',
+    '发出去吧，剩下的交给时间和真心 🐾'
+  ];
+  const comment = petComments[Math.floor(Math.random() * petComments.length)];
+  const commentEl = document.getElementById('p4PetComment');
+  if (commentEl) commentEl.textContent = comment;
 
   // Update success page (p5) modules
   document.getElementById('modSpeech').textContent  = parsedResult.speech;
