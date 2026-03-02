@@ -309,6 +309,27 @@
     30% { transform: translateY(-10px); background: var(--pink); }
   }
 
+  /* ─── REASON INPUT (Q4) ─── */
+  .reason-textarea {
+    width: 100%;
+    min-height: 80px;
+    border: 1.5px solid var(--pink-mid);
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 15px;
+    font-family: 'Noto Sans SC', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    resize: none;
+    outline: none;
+    line-height: 1.6;
+    transition: border-color 0.2s;
+    margin-top: 10px;
+  }
+  .reason-textarea:focus { border-color: var(--pink); }
+  .reason-textarea::placeholder { color: #ccc; }
+  .reason-hint { font-size: 12px; color: #bbb; margin-top: 6px; padding-left: 4px; }
+
   /* ─── PAGE 4: RESULT ─── */
   #p4 { padding-bottom: 180px; }
   .result-header {
@@ -322,8 +343,9 @@
   }
   .result-header p { font-size: 14px; color: var(--text-sub); }
 
+  /* Result preview card with blur */
   .result-card-wrap {
-    margin: 20px 20px 0;
+    margin: 16px 20px 0;
     border-radius: 20px;
     overflow: hidden;
     position: relative;
@@ -331,19 +353,19 @@
   }
   .result-card {
     background: var(--white);
-    padding: 24px 20px;
+    padding: 20px 20px 16px;
     position: relative;
   }
   .result-card .quote-mark {
     font-family: Georgia, serif;
-    font-size: 64px;
+    font-size: 48px;
     color: var(--pink-mid);
     line-height: 1;
-    margin-bottom: -16px;
+    margin-bottom: -12px;
     display: block;
   }
   .result-text {
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.8;
     color: var(--text);
     font-weight: 400;
@@ -353,27 +375,54 @@
     filter: blur(5px);
     user-select: none;
     color: var(--text-sub);
-    position: relative;
   }
   .result-mask {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    height: 80px;
+    height: 70px;
     background: linear-gradient(to top, var(--white) 40%, transparent);
     display: flex; align-items: flex-end; justify-content: center;
-    padding-bottom: 16px;
+    padding-bottom: 14px;
   }
   .lock-hint {
     display: flex; align-items: center; gap: 6px;
     font-size: 13px; color: var(--text-sub);
   }
 
+  /* Preview module rows (locked) */
+  .preview-modules {
+    margin: 12px 20px 0;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .preview-module-row {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 2px 8px rgba(255,107,129,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+  .preview-module-row .pm-icon { font-size: 20px; flex-shrink: 0; }
+  .preview-module-row .pm-label {
+    font-size: 14px; font-weight: 600; color: var(--text);
+    flex: 1;
+  }
+  .preview-module-row .pm-lock {
+    font-size: 16px; color: #ccc;
+  }
+  .preview-module-row .pm-blur-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0; top: 0;
+    background: linear-gradient(135deg, rgba(255,240,243,0.6), rgba(255,255,255,0.3));
+  }
+
   .stat-row {
-    margin: 16px 20px 0;
+    margin: 12px 20px 0;
     background: linear-gradient(135deg, #FFF0F3, #FFF8F9);
     border: 1px solid var(--pink-mid);
     border-radius: 16px;
-    padding: 14px 20px;
+    padding: 12px 20px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -387,7 +436,7 @@
   .stat-row .stat-desc { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
 
   .price-block {
-    margin: 16px 20px 0;
+    margin: 12px 20px 0;
     text-align: center;
   }
   .price-old {
@@ -417,60 +466,72 @@
     text-align: center;
     font-size: 12px;
     color: var(--text-sub);
-    margin-top: 10px;
+    margin-top: 8px;
   }
 
   /* ─── PAGE 5: SUCCESS ─── */
-  #p5 { align-items: center; padding: 40px 20px; }
+  #p5 { padding: 32px 20px 40px; }
 
+  .success-top {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 24px;
+  }
   .success-icon {
-    width: 80px; height: 80px;
+    width: 64px; height: 64px;
     border-radius: 50%;
     background: #FFB7C5;
     display: flex; align-items: center; justify-content: center;
-    font-size: 36px;
-    margin-bottom: 20px;
-    box-shadow: 0 8px 24px #FF8FA3;
+    font-size: 30px;
+    flex-shrink: 0;
+    box-shadow: 0 6px 20px rgba(255,107,129,0.25);
     animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
   }
   @keyframes popIn {
     from { transform: scale(0); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
   }
-
   .success-title {
     font-family: 'ZCOOL XiaoWei', serif;
-    font-size: 26px; color: var(--text);
-    margin-bottom: 8px; text-align: center;
+    font-size: 24px; color: var(--text);
+    margin-bottom: 4px;
   }
-  .success-sub { font-size: 14px; color: var(--text-sub); margin-bottom: 28px; text-align: center; }
+  .success-sub { font-size: 14px; color: var(--text-sub); }
 
-  .full-card {
-    width: 100%;
+  /* 4-module result cards */
+  .result-modules { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+
+  .rmod {
     background: var(--white);
-    border-radius: 20px;
-    padding: 24px 20px;
+    border-radius: 18px;
+    padding: 18px 20px;
     box-shadow: var(--shadow);
-    margin-bottom: 24px;
     position: relative;
   }
-  .full-card .quote-mark {
-    font-family: Georgia, serif;
-    font-size: 48px;
-    color: var(--pink-mid);
-    line-height: 0.8;
-    margin-bottom: 8px;
-    display: block;
+  .rmod-header {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 10px;
   }
-  .full-text {
-    font-size: 17px;
-    line-height: 1.8;
-    color: var(--text);
-    letter-spacing: 0.3px;
+  .rmod-icon { font-size: 20px; }
+  .rmod-title {
+    font-size: 14px; font-weight: 700; color: var(--text);
+  }
+  .rmod-body {
+    font-size: 15px; line-height: 1.75;
+    color: var(--text); letter-spacing: 0.2px;
+  }
+  /* Speech card */
+  .rmod.speech { border-left: 3px solid var(--pink); }
+  .rmod.speech .rmod-body {
+    font-size: 17px; font-weight: 500;
+  }
+  .rmod.speech .quote-mark {
+    font-family: Georgia, serif;
+    font-size: 36px; color: var(--pink-mid);
+    line-height: 0.8; display: block; margin-bottom: 6px;
   }
   .copy-ripple {
     position: absolute;
-    top: 12px; right: 12px;
+    top: 14px; right: 14px;
     background: var(--pink-light);
     border: 1px solid var(--pink-mid);
     border-radius: 10px;
@@ -483,6 +544,14 @@
   .copy-ripple:active { background: var(--pink-mid); }
   .copy-ripple.copied { background: #fae3d8; border-color: var(--warm); color: var(--warm); }
 
+  /* Info modules */
+  .rmod.reason { border-left: 3px solid #A8D8EA; }
+  .rmod.reason .rmod-title { color: #5BA4CF; }
+  .rmod.timing { border-left: 3px solid #B5EAD7; }
+  .rmod.timing .rmod-title { color: #3DAA7A; }
+  .rmod.warning { border-left: 3px solid #FFDAC1; }
+  .rmod.warning .rmod-title { color: #E07B39; }
+
   .echo-hint {
     background: linear-gradient(135deg, #FFF0F3, #FFFAFA);
     border: 1px solid var(--pink-mid);
@@ -490,7 +559,7 @@
     padding: 16px 20px;
     text-align: center;
     width: 100%;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
   .echo-hint .mascot-small { font-size: 28px; margin-bottom: 8px; }
   .echo-hint p { font-size: 14px; color: var(--text-sub); line-height: 1.6; }
@@ -615,6 +684,39 @@
         </div>
       </div>
     </div>
+
+    <!-- Q4: Reason -->
+    <div class="q-block">
+      <div class="q-title"><span class="emoji">🔍</span>大概是因为什么吵起来的？</div>
+      <div class="opts" id="q4" style="grid-template-columns:1fr 1fr 1fr;">
+        <div class="opt" data-q="4" data-val="家务分工" onclick="selectOpt(this)">
+          <span class="opt-emoji">🧹</span>家务分工
+        </div>
+        <div class="opt" data-q="4" data-val="钱的问题" onclick="selectOpt(this)">
+          <span class="opt-emoji">💸</span>钱的问题
+        </div>
+        <div class="opt" data-q="4" data-val="说话方式" onclick="selectOpt(this)">
+          <span class="opt-emoji">💬</span>说话方式
+        </div>
+        <div class="opt" data-q="4" data-val="时间陪伴" onclick="selectOpt(this)">
+          <span class="opt-emoji">⏰</span>时间/陪伴
+        </div>
+        <div class="opt" data-q="4" data-val="吃醋信任" onclick="selectOpt(this)">
+          <span class="opt-emoji">😤</span>吃醋/信任
+        </div>
+        <div class="opt" data-q="4" data-val="习惯性格" onclick="selectOpt(this)">
+          <span class="opt-emoji">🔁</span>习惯/性格
+        </div>
+        <div class="opt" data-q="4" data-val="家人问题" onclick="selectOpt(this)">
+          <span class="opt-emoji">👪</span>家人问题
+        </div>
+        <div class="opt" data-q="4" data-val="说不清楚" onclick="selectOpt(this)">
+          <span class="opt-emoji">🤷</span>说不清楚
+        </div>
+      </div>
+      <textarea class="reason-textarea" id="reasonDetail" placeholder="可以补充一点细节（选填），暖糊会生成更准的破冰话…" maxlength="150"></textarea>
+      <div class="reason-hint">最多 150 字，不填也没关系 ☁️</div>
+    </div>
   </div>
 
   <div class="fixed-bottom">
@@ -638,18 +740,19 @@
   </div>
 </div>
 
-<!-- ══════════════ PAGE 4: RESULT ══════════════ -->
+<!-- ══════════════ PAGE 4: RESULT PREVIEW ══════════════ -->
 <div class="page" id="p4">
   <div class="result-header">
-    <h2>暖糊帮你写好了 💌</h2>
-    <p>发出去之前先预览一下</p>
+    <h2>暖糊帮你准备好了 💌</h2>
+    <p>解锁查看完整的 4 个部分</p>
   </div>
 
+  <!-- Partial speech preview -->
   <div class="result-card-wrap">
     <div class="result-card">
       <span class="quote-mark">"</span>
-      <div class="result-text">
-        刚才那样说话其实不是我的本意，我只是太着急了，说话的方式不对…<span class="blur-part">我知道你现在很委屈。能不能给我一个机会好好说？我真的很在乎你，不想就这么冷着。</span>
+      <div class="result-text" id="p4PreviewText">
+        正在生成…
       </div>
       <div class="result-mask">
         <div class="lock-hint">🔒 解锁后查看完整话术</div>
@@ -657,9 +760,28 @@
     </div>
   </div>
 
+  <!-- Locked module previews -->
+  <div class="preview-modules">
+    <div class="preview-module-row">
+      <span class="pm-icon">🧠</span>
+      <span class="pm-label">这样说的原因</span>
+      <span class="pm-lock">🔒</span>
+    </div>
+    <div class="preview-module-row">
+      <span class="pm-icon">⏰</span>
+      <span class="pm-label">最佳发送时间</span>
+      <span class="pm-lock">🔒</span>
+    </div>
+    <div class="preview-module-row">
+      <span class="pm-icon">⚠️</span>
+      <span class="pm-label">发之前要避开的雷区</span>
+      <span class="pm-lock">🔒</span>
+    </div>
+  </div>
+
   <div class="stat-row">
     <div class="stat-num">78%</div>
-    <div class="stat-desc">使用这句话的人<br><strong style="color:#FF6B81;">当天成功和好</strong> 💕</div>
+    <div class="stat-desc">使用完整方案的用户<br><strong style="color:#FF6B81;">当天成功和好</strong> 💕</div>
   </div>
 
   <div class="price-block">
@@ -673,23 +795,59 @@
   <div class="safe-note">🔒 仅你可见 · 不保存任何记录</div>
 
   <div class="fixed-bottom">
-    <button class="btn-main" onclick="goTo('p5'); trackPay()">解锁完整话术并复制 💬</button>
+    <button class="btn-main" onclick="goTo('p5'); trackPay()">解锁完整方案 💬</button>
     <button class="btn-sec" onclick="goTo('p2')">重新选一次</button>
   </div>
 </div>
 
 <!-- ══════════════ PAGE 5: SUCCESS ══════════════ -->
 <div class="page" id="p5">
-  <div class="success-icon">🎉</div>
-  <div class="success-title">台阶准备好了！</div>
-  <div class="success-sub">复制发给 TA，等 TA 回你 ❤️</div>
-
-  <div class="full-card">
-    <span class="quote-mark">"</span>
-    <div class="full-text" id="fullText">
-      刚才那样说话其实不是我的本意，我只是太着急了，说话的方式不对…我知道你现在很委屈。能不能给我一个机会好好说？我真的很在乎你，不想就这么冷着。
+  <div class="success-top">
+    <div class="success-icon">🎉</div>
+    <div>
+      <div class="success-title">台阶准备好了！</div>
+      <div class="success-sub">发出去之前，先读一下下面的内容 ❤️</div>
     </div>
-    <div class="copy-ripple" id="copyBtn" onclick="copyText()">复制</div>
+  </div>
+
+  <div class="result-modules">
+    <!-- Module 1: Speech -->
+    <div class="rmod speech">
+      <div class="rmod-header">
+        <span class="rmod-icon">💬</span>
+        <span class="rmod-title">破冰话术</span>
+      </div>
+      <span class="quote-mark">"</span>
+      <div class="rmod-body" id="modSpeech">加载中…</div>
+      <div class="copy-ripple" id="copyBtn" onclick="copyText()">复制</div>
+    </div>
+
+    <!-- Module 2: Reason -->
+    <div class="rmod reason">
+      <div class="rmod-header">
+        <span class="rmod-icon">🧠</span>
+        <span class="rmod-title">这样说的原因</span>
+      </div>
+      <div class="rmod-body" id="modReason">加载中…</div>
+    </div>
+
+    <!-- Module 3: Timing -->
+    <div class="rmod timing">
+      <div class="rmod-header">
+        <span class="rmod-icon">⏰</span>
+        <span class="rmod-title">最佳发送时间</span>
+      </div>
+      <div class="rmod-body" id="modTiming">加载中…</div>
+    </div>
+
+    <!-- Module 4: Warning -->
+    <div class="rmod warning">
+      <div class="rmod-header">
+        <span class="rmod-icon">⚠️</span>
+        <span class="rmod-title">发之前要避开的雷区</span>
+      </div>
+      <div class="rmod-body" id="modWarning">加载中…</div>
+    </div>
   </div>
 
   <div class="echo-hint">
@@ -697,7 +855,7 @@
     <p>等 TA 回复你之后<br><strong>记得回来告诉暖糊结果</strong><br>暖糊在这里等你好消息 🌸</p>
   </div>
 
-  <button class="btn-main" onclick="copyText()" style="width:100%">一键复制发给 TA 💬</button>
+  <button class="btn-main" onclick="copyText()" style="width:100%">一键复制话术发给 TA 💬</button>
 </div>
 
 <script>
@@ -708,8 +866,8 @@ function goTo(id) {
   window.scrollTo(0, 0);
 }
 
-// ─── SELECT LOGIC ───
-const answers = { 1: null, 2: null, 3: null };
+// ─── SELECT LOGIC ─── (Q1-Q4, Q4 required)
+const answers = { 1: null, 2: null, 3: null, 4: null };
 
 function selectOpt(el) {
   const q = parseInt(el.dataset.q);
@@ -723,12 +881,13 @@ function selectOpt(el) {
 
 function updateProgress() {
   const filled = Object.values(answers).filter(v => v !== null).length;
-  const pct = Math.round((filled / 3) * 80) + (filled === 3 ? 20 : 0);
-  document.getElementById('progressFill').style.width = pct + '%';
+  const pct = Math.round((filled / 4) * 100);
+  document.getElementById('progressFill').style.width = Math.min(pct, 95) + '%';
 }
 
 function checkReady() {
-  const all = Object.values(answers).every(v => v !== null);
+  // Q1-Q4 all required (free text optional)
+  const all = answers[1] && answers[2] && answers[3] && answers[4];
   const btn = document.getElementById('genBtn');
   btn.classList.toggle('disabled', !all);
 }
@@ -763,73 +922,75 @@ function startGenerate() {
 
 async function generateAI() {
   try {
-
+    const detail = document.getElementById('reasonDetail').value.trim();
     const res = await fetch("/api/generate", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         state: answers[1],
         personality: answers[2],
-        style: answers[3]
+        style: answers[3],
+        reason: answers[4],
+        detail: detail || ''
       })
     });
 
     const data = await res.json();
-
     clearInterval(loadInterval);
-
-    buildResult(data.result); // 把 AI 结果传进去
-
+    buildResult(data.result);
     goTo('p4');
 
   } catch (err) {
-
     clearInterval(loadInterval);
-
     document.getElementById("loadingText").textContent = "暖糊刚刚打了个盹…再试一次吧 💤";
-
     console.error(err);
   }
 }
 
-// ─── RESULT GENERATOR ───
-const scripts = {
-  coldwar_softheart_sincere: '我知道你现在很委屈，冷战这段时间我一直在想是不是我太不体贴了。能不能给我一次机会重新开始这个对话？',
-  coldwar_gentle_cute: '我已经想了好久要怎么跟你说话了……能不能别冷战了，我想抱你。',
-  coldwar_rational_step: '我想了很多，我们都需要冷静一下。现在冷静了，你有空的话，我们可以说说吗？',
-  coldwar_sensitive_humor: '好了好了，我投降，我举白旗了。我们能不能先停战，再一起把原因说清楚？',
-  makeup_softheart_sincere: '我很在意你，所以吵架才这么难受。不管谁对谁错，我只是想先和好，你愿意吗？',
-  makeup_gentle_cute: '我错了嘛，我承认了嘛，你能不能把我当宝贝对待一下嘛 🥺',
-  makeup_rational_step: '我想了一下，我的处理方式有问题。我们可以重新谈谈吗？我想找到一个我们都舒服的方案。',
-  wrongsay_softheart_sincere: '刚才那话不是我的本意，我只是太着急了，说错了方式。你还好吗？',
-  wrongsay_gentle_cute: '对不起，我刚才说话真的不对 😔 你能原谅我吗？我不是要伤害你的。',
-  ignored_softheart_sincere: '你不回我的时候，我比你更难受。我只是想知道你还好吗。',
-  ignored_sensitive_step: '我不知道我哪里让你不开心了，但我想知道。你愿意告诉我吗？',
-};
+// ─── RESULT BUILDER ───
+// Stores parsed modules globally for use on p5
+let parsedResult = { speech: '', reason: '', timing: '', warning: '' };
 
-const fallback = '刚才那样说话其实不是我的本意，我只是太着急了，说话方式不对……我知道你现在很委屈。能不能给我一个机会好好说？我真的很在乎你，不想就这么冷着。';
+function buildResult(aiText) {
+  if (!aiText) { aiText = ''; }
 
-function buildResult(aiResult) {
-  const key = `${answers[1]}_${answers[2]}_${answers[3]}`;
-  const fullMsg = aiResult || scripts[key] || fallback;
+  // Try to parse JSON from API
+  try {
+    const parsed = JSON.parse(aiText);
+    parsedResult = {
+      speech:  parsed.speech  || parsed['破冰话术']  || '',
+      reason:  parsed.reason  || parsed['这样说的原因'] || '',
+      timing:  parsed.timing  || parsed['最佳发送时间'] || '',
+      warning: parsed.warning || parsed['避雷点']    || ''
+    };
+  } catch(e) {
+    // Fallback: treat whole response as speech text
+    parsedResult = {
+      speech: aiText,
+      reason: '这段话从对方的情绪出发，先承认自己有做得不够好的地方，让TA感觉被理解，而不是被反驳。',
+      timing: '建议在 TA 情绪稍微平静后发送，不要在刚吵完的1小时内发，效果更好。',
+      warning: '不要在话术后面加"你懂不懂"、"你这个人"等评判性语言，容易让和解失败。'
+    };
+  }
 
-  // Show partial in result page
-  const cutOff = Math.floor(fullMsg.length * 0.5);
-  const visible = fullMsg.slice(0, cutOff);
-  const hidden = fullMsg.slice(cutOff);
-
-  document.querySelector('#p4 .result-text').innerHTML =
+  // Update preview page (p4)
+  const speech = parsedResult.speech;
+  const cutOff = Math.floor(speech.length * 0.48);
+  const visible = speech.slice(0, cutOff);
+  const hidden = speech.slice(cutOff);
+  document.getElementById('p4PreviewText').innerHTML =
     visible + `<span class="blur-part">${hidden}</span>`;
 
-  // Full text in success page
-  document.getElementById('fullText').textContent = fullMsg;
+  // Update success page (p5) modules
+  document.getElementById('modSpeech').textContent  = parsedResult.speech;
+  document.getElementById('modReason').textContent  = parsedResult.reason;
+  document.getElementById('modTiming').textContent  = parsedResult.timing;
+  document.getElementById('modWarning').textContent = parsedResult.warning;
 }
 
 // ─── COPY ───
 function copyText() {
-  const text = document.getElementById('fullText').textContent;
+  const text = parsedResult.speech || document.getElementById('modSpeech').textContent;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(() => showCopied());
   } else {
