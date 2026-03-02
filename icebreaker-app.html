@@ -577,22 +577,19 @@
   }
 
   .rmod {
-    background: var(--white);
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFF9FA 100%);
     border-radius: 24px;
     padding: 24px;
     margin: 0 24px 16px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-    border: 1px solid #FFF5F6;
+    border: 2px solid var(--pink-mid);
   }
   .rmod-header {
     display: flex; align-items: center; gap: 8px;
     margin-bottom: 16px;
     font-size: 15px; font-weight: 700; color: var(--pink);
   }
-  .rmod.speech {
-    background: linear-gradient(135deg, #FFFFFF 0%, #FFF9FA 100%);
-    border: 2px solid var(--pink-mid);
-  }
+  .rmod.speech { /* 与其他模块统一：只保留引号样式由内容决定 */ }
   .copy-ripple {
     position: absolute;
     top: 20px; right: 20px;
@@ -607,13 +604,13 @@
   .copy-ripple:active { background: var(--pink-mid); }
   .copy-ripple.copied { background: #fae3d8; border-color: var(--warm); color: var(--warm); }
 
-  /* Info modules */
-  .rmod.reason { border-left: 3px solid #A8D8EA; }
-  .rmod.reason .rmod-title { color: #5BA4CF; }
-  .rmod.timing { border-left: 3px solid #B5EAD7; }
-  .rmod.timing .rmod-title { color: #3DAA7A; }
-  .rmod.warning { border-left: 3px solid #FFDAC1; }
-  .rmod.warning .rmod-title { color: #E07B39; }
+  /* Info modules - 与主卡片风格统一 */
+  .rmod.reason,
+  .rmod.timing,
+  .rmod.warning { border-left: none; }
+  .rmod.reason .rmod-title,
+  .rmod.timing .rmod-title,
+  .rmod.warning .rmod-title { color: var(--text); }
 
   .echo-hint {
     background: linear-gradient(135deg, #FFF0F3, #FFFAFA);
@@ -955,8 +952,8 @@
 
   <!-- 暖糊评语气泡 -->
   <div class="result-pet-comment">
-    <div class="pet-avatar" style="width:36px;height:36px;">
-      <img src="https://ykl.fit/jjj/nh1.png" alt="暖糊" style="width:28px;height:28px;">
+    <div class="pet-avatar">
+      <img src="https://ykl.fit/jjj/nh1.png" alt="暖糊">
     </div>
     <div class="pet-bubble" id="p4PetComment">
       偷偷告诉你，这句话会让TA感受到你很在乎 🐾
