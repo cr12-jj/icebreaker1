@@ -758,11 +758,40 @@ function startGenerate() {
   }, 1000);
 
   // Generate result based on answers then show
-  setTimeout(() => {
+ generateAI();
+}
+
+async function generateAI() {
+  try {
+
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        state: answers[1],
+        personality: answers[2],
+        style: answers[3]
+      })
+    });
+
+    const data = await res.json();
+
     clearInterval(loadInterval);
-    buildResult();
+
+    buildResult(data.result); // 把 AI 结果传进去
+
     goTo('p4');
-  }, 3200);
+
+  } catch (err) {
+
+    clearInterval(loadInterval);
+
+    document.getElementById("loadingText").textContent = "暖糊刚刚打了个盹…再试一次吧 💤";
+
+    console.error(err);
+  }
 }
 
 // ─── RESULT GENERATOR ───
