@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   try {
-    // ⭐ Vercel 必须用 req.json() 来解析 body
-    const body = await req.json();
+    // ⭐ 在 Node.js Runtime 中，req.body 是字符串，需要手动解析
+    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     const { state, personality, style } = body;
 
     const prompt = `
